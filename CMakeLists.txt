@@ -33,7 +33,10 @@ if(BUILD_TESTING)
 endif()
 
 install(
-  DIRECTORY config description launch worlds
+  DIRECTORY
+    launch
+    description
+    worlds   # <--- ADD THIS LINE
   DESTINATION share/${PROJECT_NAME}
 )
 
