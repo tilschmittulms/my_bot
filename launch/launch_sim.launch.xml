@@ -1,0 +1,22 @@
+<launch>
+  <let name="pkg_share" value="$(find-pkg-share my_bot)"/>
+  <let name="world_path" value="$(var pkg_share)/worlds/obstacle.sdf"/>
+
+  <include file="$(var pkg_share)/launch/rsp.launch.py">
+    <arg name="use_sim_time" value="true"/>
+  </include>
+
+  <executable cmd="gz sim -r -v 4 $(var world_path)" output="screen" />
+
+  <node pkg="ros_gz_sim" exec="create" output="screen" 
+        args="-topic robot_description -name my_bot" />
+
+  <node pkg="ros_gz_bridge" exec="parameter_bridge" output="screen"
+        args="/clock@rosgraph_msgs/msg/Clock@gz.msgs.Clock 
+              /cmd_vel@geometry_msgs/msg/Twist@gz.msgs.Twist 
+              /odom@nav_msgs/msg/Odometry@gz.msgs.Odometry 
+              /tf@tf2_msgs/msg/TFMessage@gz.msgs.Pose_V 
+              /joint_states@sensor_msgs/msg/JointState@gz.msgs.Model 
+              /scan@sensor_msgs/msg/LaserScan@gz.msgs.LaserScan 
+              /camera/image_raw@sensor_msgs/msg/Image@gz.msgs.Image" />
+</launch>
